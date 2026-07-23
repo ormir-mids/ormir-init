@@ -1,0 +1,48 @@
+# DICOM
+*.dcm
+*.DCM
+
+# NIfTI
+*.nii
+*.nii.gz
+
+# NRRD
+*.nrrd
+*.nhdr
+
+# MetaImage
+*.mhd
+*.mha
+*.raw
+
+# Analyze
+*.hdr
+*.img
+
+# MINC
+*.mnc
+
+# NIfTI-2
+*.nia
+
+# MicroCT
+*.AIM
+*.aim
+*.ISQ
+*.isq
+
+# Surface meshes
+*.vtk
+*.vtp
+*.stl
+*.ply
+*.obj
+
+# Common imaging exports
+*.tif
+*.tiff
+
+# Scanner archives
+*.zip
+*.tar
+*.tar.gz
