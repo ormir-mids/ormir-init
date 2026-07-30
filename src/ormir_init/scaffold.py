@@ -10,16 +10,17 @@ Usage:
     --license: The license for the dataset (APACHE, MIT, ISC, GPL, CC) default CC
 
 Created by: S.D. McGarry 07/08/2026
-Last modified: 07/08/2026
+Last modified: 07/23/2026
 """
+
 import argparse
 import json
 import re
-import sys
-from pathlib import Path
-import subprocess
-from importlib.resources import files
 import shutil
+import subprocess
+import sys
+from importlib.resources import files
+from pathlib import Path
 
 def validate_git_available() -> None:
     if shutil.which("git") is None:
@@ -56,7 +57,7 @@ def validate_inputs(root_directory: str, dataset_name: str) -> Path:
 
 def create_file_if_missing(path: Path, content: str) -> None:
     if not path.exists():
-        path.write_text(content)
+        path.write_text(content, encoding="utf-8")
 
 def create_mids_scaffold(dataset_root: Path, license_name: str) -> None:
     folders = [
@@ -104,7 +105,7 @@ def create_mids_scaffold(dataset_root: Path, license_name: str) -> None:
     if not dataset_description_path.exists():
         dataset_description_path.write_text(
             json.dumps(dataset_description, indent=4) + "\n"
-        )
+                                            , encoding="utf-8")
 
 def setup_git(dataset_root: Path) -> None:
     try:
@@ -120,10 +121,11 @@ def setup_git(dataset_root: Path) -> None:
             "ERROR: Git is not installed or not available on PATH.\n"
             "Dataset scaffold was created, but Git was not initialized."
         )
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError as error:
         sys.exit(
             "ERROR: Failed to initialize Git repository.\n"
-            f"{e.stderr}"
+            f"An incomplete project remains at:\n{dataset_root}\n\n"
+            f"Git reported:\n{error.stderr.strip()}"
         )
 
     write_gitignore(dataset_root)
@@ -147,7 +149,7 @@ def write_gitignore(dataset_root: Path) -> None:
 
 SUPPORTED_LICENSES = {
     "cc": {
-        "spdx": "CC-BY-4.0",
+        "spdx": "CC-BY-SA",
         "file": "cc.txt",
     },
     "mit": {
@@ -187,7 +189,7 @@ def main() -> None:
         type=str,
         default="cc",
         choices=SUPPORTED_LICENSES,
-        help="Data license for the dataset. Default: cc (CC-BY-4.0)"
+        help="Data license for the dataset. Default: cc (CC-BY-SA)"
     )
 
     args = parser.parse_args()
